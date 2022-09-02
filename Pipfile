@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+ijson = "*"
 
 [dev-packages]
-guppy3 = "*"
 
 [requires]
 python_version = "3.7"
