@@ -1,0 +1,3 @@
+
+class DatasetNotFoundError(Exception):
+    pass
