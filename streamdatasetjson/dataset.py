@@ -19,7 +19,7 @@ class Dataset:
 
     @property
     def observations(self):
-        return utils.reread_prefix("itemData.item")
+        return utils.reread_prefix(f"{self._dataset_prefix}.itemData.item")
 
     @property
     def records(self):
