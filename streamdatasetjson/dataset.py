@@ -1,5 +1,4 @@
-import ijson
-
+import utils
 
 class Dataset:
     def __init__(self, dataset_json_file, name):
@@ -11,13 +10,8 @@ class Dataset:
         self._label   = self._get_attribute("label")
         self._items   = self._get_attribute("items")
 
-    def _read_prefix(self, prefix):
-        self._df.seek(0)
-        return ijson.items(self._df, f"{self._dataset_prefix}.{prefix}")
-
-
     def _get_attribute(self, attr_name):
-        return next(self._read_prefix(attr_name))
+        return utils.load_prefix(self._df, f"{self._dataset_prefix}.{attr_name}")
     
     @property
     def name(self):
@@ -25,7 +19,7 @@ class Dataset:
 
     @property
     def observations(self):
-        return self._read_prefix("itemData.item")
+        return utils.reread_prefix("itemData.item")
 
     @property
     def records(self):

@@ -1,5 +1,8 @@
+import utils
+
 from dataset import Dataset
 from errors import DatasetNotFoundError
+
 
 class DatasetJSON:
     def __enter__(self):
@@ -17,4 +20,3 @@ class DatasetJSON:
             return Dataset(self._file, target_name)
         except StopIteration:
             raise DatasetNotFoundError(target_name)
-
