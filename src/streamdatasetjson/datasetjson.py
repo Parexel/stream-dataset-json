@@ -16,7 +16,7 @@ class DatasetJSON:
         return self
 
     def __exit__(self, type, value, traceback):
-        self._file.close()
+        self.close()
 
     def __init__(self, path):
         self._path = path
@@ -30,6 +30,9 @@ class DatasetJSON:
     @property
     def available_datasets(self) -> List[str]:
         return self._dataset_prefixes.keys()
+
+    def close(self):
+        self._file.close()
 
     def _generate_dataset_prefixes(self):
         events = ijson.parse(self._file)
