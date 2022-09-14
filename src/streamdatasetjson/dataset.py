@@ -36,7 +36,7 @@ class Dataset:
                     name   = raw_item["name"],
                     label  = raw_item["label"],
                     type   = raw_item["type"],
-                    length = raw_item["length"])
+                    length = raw_item.get("length", None))
     
     @property
     def name(self) -> str:
