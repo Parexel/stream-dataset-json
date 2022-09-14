@@ -1,16 +1,23 @@
+from collections import namedtuple
 from io import TextIOWrapper
-from typing import Iterable, NewType
+from typing import Iterable, NamedTuple, NewType, Optional
 import utils
 
 
 Row = NewType("Row", 'list[str]')
-VarMeta = NewType("VarMeta", dict)
-
 JSONFileObject = NewType("JSONFileObject", TextIOWrapper)
+
+class Item(NamedTuple):
+    oid:    str
+    name:   str
+    label:  str
+    type:   str
+    length: Optional[int]
+
 
 class Dataset:
     """
-    Dataset. Should not be instantiated manually.
+    Dataset. Should not be instantiated directly.
     """
     def __init__(self, dataset_json_file: JSONFileObject, name: str, prefix: str):
         self._df = dataset_json_file
@@ -18,10 +25,18 @@ class Dataset:
         self._name = name
         self._records = self._get_attribute("records")
         self._label   = self._get_attribute("label")
-        self._items   = self._get_attribute("items")
+        self._items   = [ self._raw_to_item(raw_item) 
+                            for raw_item in self._get_attribute("items") ]
 
     def _get_attribute(self, attr_name: str):
         return utils.load_prefix(self._df, f"{self._prefix}.{attr_name}")
+
+    def _raw_to_item(self, raw_item: dict) -> Item:
+        return Item(oid    = raw_item["OID"],
+                    name   = raw_item["name"],
+                    label  = raw_item["label"],
+                    type   = raw_item["type"],
+                    length = raw_item["length"])
     
     @property
     def name(self) -> str:
@@ -40,7 +55,7 @@ class Dataset:
         return self._label
 
     @property
-    def items(self) -> VarMeta:
+    def items(self) -> 'list[Item]':
         return self._items
 
     @property
