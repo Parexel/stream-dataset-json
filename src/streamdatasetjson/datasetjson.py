@@ -1,4 +1,5 @@
-from typing import List
+from types import TracebackType
+from typing import Optional, Type
 import ijson
 import utils
 
@@ -15,10 +16,13 @@ class DatasetJSON:
         self._dataset_prefixes = self._generate_dataset_prefixes()
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, 
+                 type: Optional[Type[BaseException]], 
+                 value: Optional[BaseException], 
+                 traceback: Optional[TracebackType]) -> bool:
         self.close()
 
-    def __init__(self, path):
+    def __init__(self, path: str):
         self._path = path
 
     def get_dataset(self, target_name: str) -> Dataset:
@@ -28,7 +32,7 @@ class DatasetJSON:
         return Dataset(self._file, target_name, self._dataset_prefixes[target_name])
     
     @property
-    def available_datasets(self) -> List[str]:
+    def available_datasets(self) -> 'list[str]':
         return self._dataset_prefixes.keys()
 
     def close(self):

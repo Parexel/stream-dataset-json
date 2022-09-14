@@ -1,15 +1,18 @@
-from typing import Iterable, List, NewType
+from io import TextIOWrapper
+from typing import Iterable, NewType
 import utils
 
 
-Row = NewType("Row", List[str])
+Row = NewType("Row", 'list[str]')
 VarMeta = NewType("VarMeta", dict)
+
+JSONFileObject = NewType("JSONFileObject", TextIOWrapper)
 
 class Dataset:
     """
     Dataset. Should not be instantiated manually.
     """
-    def __init__(self, dataset_json_file, name, prefix):
+    def __init__(self, dataset_json_file: JSONFileObject, name: str, prefix: str):
         self._df = dataset_json_file
         self._prefix = prefix
         self._name = name
@@ -17,7 +20,7 @@ class Dataset:
         self._label   = self._get_attribute("label")
         self._items   = self._get_attribute("items")
 
-    def _get_attribute(self, attr_name):
+    def _get_attribute(self, attr_name: str):
         return utils.load_prefix(self._df, f"{self._prefix}.{attr_name}")
     
     @property
@@ -41,5 +44,5 @@ class Dataset:
         return self._items
 
     @property
-    def variables(self) -> List[str]:
+    def variables(self) -> 'list[str]':
         return [ meta["name"] for meta in self.items ]
