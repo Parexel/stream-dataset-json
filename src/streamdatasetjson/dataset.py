@@ -6,6 +6,7 @@ import utils
 Row = NewType("Row", 'list[str]')
 JSONFileObject = NewType("JSONFileObject", TextIOWrapper)
 
+
 class Item(NamedTuple):
     oid:    str
     name:   str
@@ -18,25 +19,26 @@ class Dataset:
     """
     Dataset. Should not be instantiated directly.
     """
+
     def __init__(self, dataset_json_file: JSONFileObject, name: str, prefix: str):
         self._df = dataset_json_file
         self._prefix = prefix
         self._name = name
         self._records = self._get_attribute("records")
-        self._label   = self._get_attribute("label")
-        self._items   = [ self._raw_to_item(raw_item) 
-                            for raw_item in self._get_attribute("items") ]
+        self._label = self._get_attribute("label")
+        self._items = [self._raw_to_item(raw_item)
+                       for raw_item in self._get_attribute("items")]
 
     def _get_attribute(self, attr_name: str):
         return utils.load_prefix(self._df, f"{self._prefix}.{attr_name}")
 
     def _raw_to_item(self, raw_item: dict) -> Item:
-        return Item(oid    = raw_item["OID"],
-                    name   = raw_item["name"],
-                    label  = raw_item["label"],
-                    type   = raw_item["type"],
-                    length = raw_item.get("length", None))
-    
+        return Item(oid=raw_item["OID"],
+                    name=raw_item["name"],
+                    label=raw_item["label"],
+                    type=raw_item["type"],
+                    length=raw_item.get("length", None))
+
     @property
     def name(self) -> str:
         return self._name
@@ -59,4 +61,4 @@ class Dataset:
 
     @property
     def variables(self) -> 'list[str]':
-        return [ meta["name"] for meta in self.items ]
+        return [meta["name"] for meta in self.items]

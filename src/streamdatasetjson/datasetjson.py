@@ -9,16 +9,17 @@ from errors import DatasetNotFoundError
 
 class DatasetJSON:
     """
-    Dataset JSON instance. 
+    Dataset JSON instance.
     """
+
     def __enter__(self):
         self._file = open(self._path, "r")
         self._dataset_prefixes = self._generate_dataset_prefixes()
         return self
 
-    def __exit__(self, 
-                 type: Optional[Type[BaseException]], 
-                 value: Optional[BaseException], 
+    def __exit__(self,
+                 type: Optional[Type[BaseException]],
+                 value: Optional[BaseException],
                  traceback: Optional[TracebackType]) -> bool:
         self.close()
 
@@ -30,7 +31,7 @@ class DatasetJSON:
             raise DatasetNotFoundError(target_name)
 
         return Dataset(self._file, target_name, self._dataset_prefixes[target_name])
-    
+
     @property
     def available_datasets(self) -> 'list[str]':
         return self._dataset_prefixes.keys()
@@ -47,4 +48,4 @@ class DatasetJSON:
                 if event == "map_key":
                     prefixes.append(f"{prefix}.{value}")
 
-        return { utils.load_prefix(self._file, f"{prefix}.name"): prefix for prefix in prefixes }
+        return {utils.load_prefix(self._file, f"{prefix}.name"): prefix for prefix in prefixes}

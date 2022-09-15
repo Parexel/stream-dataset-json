@@ -1,11 +1,13 @@
 import ijson
 
+
 def reread_prefix(f, prefix):
     """
     Reads the file form the start and retrieves the values for the given prefix.
     """
     f.seek(0)
     return ijson.items(f, prefix)
+
 
 def load_prefix(f, prefix):
     """
