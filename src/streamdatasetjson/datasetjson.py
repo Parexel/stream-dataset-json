@@ -1,7 +1,6 @@
 from types import TracebackType
 from typing import Optional, Type
 import ijson
-import utils
 
 from dataset import Dataset
 from errors import DatasetNotFoundError
@@ -34,18 +33,25 @@ class DatasetJSON:
 
     @property
     def available_datasets(self) -> 'list[str]':
-        return self._dataset_prefixes.keys()
+        return list(self._dataset_prefixes.keys())
 
     def close(self):
         self._file.close()
 
-    def _generate_dataset_prefixes(self):
+    def _generate_dataset_prefixes(self) -> dict:
         events = ijson.parse(self._file)
 
         prefixes = []
+        names = []
+        last_prefix = None
         for prefix, event, value in events:
             if prefix == "clinicalData.itemGroupData" or prefix == "referenceData.itemGroupData":
                 if event == "map_key":
-                    prefixes.append(f"{prefix}.{value}")
+                    last_prefix = f"{prefix}.{value}"
+                    prefixes.append(last_prefix)
 
-        return {utils.load_prefix(self._file, f"{prefix}.name"): prefix for prefix in prefixes}
+            if last_prefix and prefix == f"{last_prefix}.name":
+                names.append(value)
+                last_prefix = None
+
+        return dict(zip(names, prefixes))
