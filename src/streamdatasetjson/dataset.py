@@ -1,4 +1,3 @@
-from collections import namedtuple
 from io import TextIOWrapper
 from typing import Iterable, NamedTuple, NewType, Optional
 import utils
