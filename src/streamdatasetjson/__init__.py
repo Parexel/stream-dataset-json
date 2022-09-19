@@ -1,2 +1,2 @@
-from datasetjson import DatasetJSON
-from dataset import Dataset
+from streamdatasetjson.datasetjson import DatasetJSON
+from streamdatasetjson.dataset import Dataset
