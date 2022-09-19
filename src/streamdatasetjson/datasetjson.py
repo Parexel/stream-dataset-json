@@ -1,9 +1,10 @@
-from types import TracebackType
-from typing import Optional, Type
 import ijson
 
-from dataset import Dataset
-from errors import DatasetNotFoundError
+from types import TracebackType
+from typing import Optional, Type
+
+from streamdatasetjson.dataset import Dataset
+from streamdatasetjson.errors import DatasetNotFoundError
 
 
 class DatasetJSON:

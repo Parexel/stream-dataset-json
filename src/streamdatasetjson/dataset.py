@@ -1,6 +1,6 @@
 from io import TextIOWrapper
 from typing import Iterable, NamedTuple, NewType, Optional
-import utils
+import streamdatasetjson.utils as utils
 
 
 Row = NewType("Row", 'list[str]')
