@@ -13,8 +13,6 @@ class DatasetJSON:
     """
 
     def __enter__(self):
-        self._file = open(self._path, "r")
-        self._dataset_prefixes = self._generate_dataset_prefixes()
         return self
 
     def __exit__(self,
@@ -25,6 +23,8 @@ class DatasetJSON:
 
     def __init__(self, path: str):
         self._path = path
+        self._file = open(self._path, "r")
+        self._dataset_prefixes = self._generate_dataset_prefixes()
 
     def get_dataset(self, target_name: str) -> Dataset:
         if target_name not in self._dataset_prefixes.keys():
