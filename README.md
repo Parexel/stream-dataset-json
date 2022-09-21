@@ -2,7 +2,7 @@
 
 ## What is it?
 
-**stream-dataset-jspm** is a Python package that provides data
+**stream-dataset-json** is a Python package that provides data
 structures designed to make working with Dataset JSON easy and intuitive. 
 
 ## Main Features
