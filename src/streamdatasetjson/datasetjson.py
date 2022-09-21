@@ -23,7 +23,7 @@ class DatasetJSON:
 
     def __init__(self, path: str):
         self._path = path
-        self._file = open(self._path, "r")
+        self._file = open(self._path, "rb")
         self._dataset_prefixes = self._generate_dataset_prefixes()
 
     def get_dataset(self, target_name: str) -> Dataset:
