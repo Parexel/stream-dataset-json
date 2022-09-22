@@ -55,13 +55,15 @@ class TestDatasetItemsProperty:
     def test_correctly_loads_all_attributes_for_each_of_the_items_property_for_jsons_with_one_dataset(self):
         with dj.DatasetJSON(SIMPLE_DATASET_PATH) as json:
             simple_dataset = json.get_dataset("DM")
-            first_item = simple_dataset.items[0]
-            assert first_item.oid == "ITEMGROUPDATASEQ" and first_item.name == "ITEMGROUPDATASEQ" \
-                and first_item.label == "Record identifier" and first_item.type == "integer"
+            item = simple_dataset.items[0]
+            assert item.oid == "ITEMGROUPDATASEQ" and item.name == "ITEMGROUPDATASEQ" \
+                and item.label == "Record identifier" and item.type == "integer" \
+                and item.length is None
 
     def test_correctly_loads_all_attributes_for_each_of_the_items_property_for_jsons_with_multiple_datasets(self):
         with dj.DatasetJSON(MULTIPLE_DATASETS_PATH) as json:
             multi_dataset = json.get_dataset("AE")
-            first_item = multi_dataset.items[0]
-            assert first_item.oid == "ITEMGROUPDATASEQ" and first_item.name == "ITEMGROUPDATASEQ" \
-                and first_item.label == "Record identifier" and first_item.type == "integer"
+            item = multi_dataset.items[3]
+            assert item.oid == "IT.DOMAIN" and item.name == "DOMAIN" \
+                and item.label == "Domain Identifier" and item.type == "string" \
+                and item.length == 2
