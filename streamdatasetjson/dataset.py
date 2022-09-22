@@ -61,4 +61,4 @@ class Dataset:
 
     @property
     def variables(self) -> 'list[str]':
-        return [meta["name"] for meta in self.items]
+        return [meta.name for meta in self.items]

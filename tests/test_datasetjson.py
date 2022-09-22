@@ -16,9 +16,9 @@ class TestDatasetJSONAvailableDatasets:
         with dj.DatasetJSON(MULTIPLE_DATASETS_PATH) as json:
             assert json.available_datasets == ["DM", "AE"]
 
-    def test_fails_if_the_given_json_path_is_invalid(self):
-        # TODO
-        pass
+    # def test_fails_if_the_given_json_path_is_invalid(self):
+    #     # TODO
+    #     pass
 
 
 class TestDatasetJSONGetDataset:
