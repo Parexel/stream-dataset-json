@@ -76,6 +76,8 @@ class TestDatasetItemsProperty:
 
 
 class TestDatasetObservationsProperty:
+    CONSIDERABLE_MEMORY_ENCREASE = 0.1
+
     def test_looping_over_every_observation_does_not_considerably_encrease_memory_usage(self):
         with dj.DatasetJSON(BIG_DATASET_PATH) as json:
             process = psutil.Process(os.getpid())
@@ -83,8 +85,7 @@ class TestDatasetObservationsProperty:
             dataset = json.get_dataset("ADLBC")
             collections.deque(dataset.observations)
             memory_after = process.memory_info().rss
-            encrease = 0.1  # Will fail if memory encreases by more than 10%
-            assert memory_after <= memory_before * (1 + encrease)
+            assert memory_after <= memory_before * (1 + self.CONSIDERABLE_MEMORY_ENCREASE)
 
     def test_using_standard_json_library_does_encrease_memory_usage_when_iterating_over_every_observation(self):
         with open(BIG_DATASET_PATH, "rt") as file:
@@ -93,5 +94,4 @@ class TestDatasetObservationsProperty:
             dataset = json.load(file)["clinicalData"]["itemGroupData"]["ADLBC"]
             collections.deque(dataset["itemData"])
             memory_after = process.memory_info().rss
-            encrease = 0.1
-            assert memory_after > memory_before * (1 + encrease)
+            assert memory_after > memory_before * (1 + self.CONSIDERABLE_MEMORY_ENCREASE)
