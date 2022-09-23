@@ -1,7 +1,13 @@
+import collections
 import pytest
 import streamdatasetjson as dj
+import psutil
+import os
+import json
 
 
+BIG_DATASET_PATH = "./examples/adlbc.json"
+ADAE_DATASET_PATH = "./examples/adae.json"
 SIMPLE_DATASET_PATH = "./examples/simple_dataset.json"
 MULTIPLE_DATASETS_PATH = "./examples/multiple_datasets.json"
 NON_EXISTENT_PATH = "./examples/non_existent.json"
@@ -67,3 +73,25 @@ class TestDatasetItemsProperty:
             assert item.oid == "IT.DOMAIN" and item.name == "DOMAIN" \
                 and item.label == "Domain Identifier" and item.type == "string" \
                 and item.length == 2
+
+
+class TestDatasetObservationsProperty:
+    def test_looping_over_every_observation_does_not_considerably_encrease_memory_usage(self):
+        with dj.DatasetJSON(BIG_DATASET_PATH) as json:
+            process = psutil.Process(os.getpid())
+            memory_before = process.memory_info().rss
+            dataset = json.get_dataset("ADLBC")
+            collections.deque(dataset.observations)
+            memory_after = process.memory_info().rss
+            encrease = 0.1  # Will fail if memory encreases by more than 10%
+            assert memory_after <= memory_before * (1 + encrease)
+
+    def test_using_standard_json_library_does_encrease_memory_usage_when_iterating_over_every_observation(self):
+        with open(BIG_DATASET_PATH, "rt") as file:
+            process = psutil.Process(os.getpid())
+            memory_before = process.memory_info().rss
+            dataset = json.load(file)["clinicalData"]["itemGroupData"]["ADLBC"]
+            collections.deque(dataset["itemData"])
+            memory_after = process.memory_info().rss
+            encrease = 0.1
+            assert memory_after > memory_before * (1 + encrease)
