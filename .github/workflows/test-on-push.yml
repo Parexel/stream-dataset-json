@@ -11,4 +11,4 @@ permissions:
 
 jobs:
   run-tests:
-    uses: Parexel/stream-dataset-json/.github/workflows/test-package.yml@main
+    uses: Parexel/stream-dataset-json/.github/workflows/test-package.yml@testing
