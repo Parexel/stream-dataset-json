@@ -46,7 +46,7 @@ class Dataset:
                 if event == "start_map":
                     item = {}
                 elif event == "end_map":
-                    self._items.append(item)
+                    self._items.append(self._raw_to_item(item))
                 elif event == "map_key":
                     item_key = value
             elif item_key and sub_prefix == f".items.item.{item_key}":
