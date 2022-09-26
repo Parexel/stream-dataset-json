@@ -1,8 +1,9 @@
+[![Test](https://github.com/Parexel/stream-dataset-json/actions/workflows/test-on-push.yml/badge.svg)](https://github.com/Parexel/stream-dataset-json/actions/workflows/test-on-push.yml)
 # stream-dataset-json: stream read tools for large Dataset JSON files
 
 ## What is it?
 
-**stream-dataset-jspm** is a Python package that provides data
+**stream-dataset-json** is a Python package that provides data
 structures designed to make working with Dataset JSON easy and intuitive. 
 
 ## Main Features
