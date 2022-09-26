@@ -1,3 +1,4 @@
+from enum import unique
 from io import TextIOWrapper
 from typing import Iterable, NamedTuple, NewType, Optional
 import streamdatasetjson.utils as utils
@@ -29,6 +30,7 @@ class Dataset:
         self._records = None
         self._label = None
         self._items = []
+        self._uniques={}
 
         self._df.seek(0)
         item, item_key = None, None
@@ -59,6 +61,24 @@ class Dataset:
                     label=raw_item["label"],
                     type=raw_item["type"],
                     length=raw_item.get("length", None))
+
+    def getUniqueValues(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
+        unique={}
+
+        for colname in self._items:
+            unique[colname]=set([])
+
+        for record in self._records:
+            if rows_to_scan != 0 and scanned_rows>=rows_to_scan:
+                break
+            scanned_rows=scanned_rows+1
+            for variable,value in zip(self._items,record):
+                unique[variable].add(value)
+
+        for columns in self._items:
+            unique[colname]=list(unique[colname])
+
+        return unique
 
     @property
     def name(self) -> str:
