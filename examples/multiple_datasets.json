@@ -1,0 +1,122 @@
+{
+    "clinicalData": {
+        "studyOID": "xxx",
+        "metaDataVersionOID": "xxx",
+        "itemGroupData": {
+            "IG.DM": {
+                "records": 600,
+                "name": "DM",
+                "label": "Demographics",
+                "items": [
+                    {
+                        "OID": "ITEMGROUPDATASEQ",
+                        "name": "ITEMGROUPDATASEQ",
+                        "label": "Record identifier",
+                        "type": "integer"
+                    },
+                    {
+                        "OID": "IT.STUDYID",
+                        "name": "STUDYID",
+                        "label": "Study identifier",
+                        "type": "string",
+                        "length": 7
+                    },
+                    {
+                        "OID": "IT.USUBJID",
+                        "name": "USUBJID",
+                        "label": "Unique Subject Identifier",
+                        "type": "string",
+                        "length": 3
+                    },
+                    {
+                        "OID": "IT.DOMAIN",
+                        "name": "DOMAIN",
+                        "label": "Domain Identifier",
+                        "type": "string",
+                        "length": 2
+                    },
+                    {
+                        "OID": "IT.AGE",
+                        "name": "AGE",
+                        "label": "Subject Age",
+                        "type": "integer",
+                        "length": 2
+                    }
+                ],
+                "itemData": [
+                    [
+                        1,
+                        "MyStudy",
+                        "001",
+                        "DM",
+                        56
+                    ],
+                    [
+                        2,
+                        "MyStudy",
+                        "002",
+                        "DM",
+                        26
+                    ]
+                ]
+            },
+            "IG.AE": {
+                "records": 200,
+                "name": "AE",
+                "label": "Adverse Events",
+                "items": [
+                    {
+                        "OID": "ITEMGROUPDATASEQ",
+                        "name": "ITEMGROUPDATASEQ",
+                        "label": "Record identifier",
+                        "type": "integer"
+                    },
+                    {
+                        "OID": "IT.STUDYID",
+                        "name": "STUDYID",
+                        "label": "Study identifier",
+                        "type": "string",
+                        "length": 7
+                    },
+                    {
+                        "OID": "IT.USUBJID",
+                        "name": "USUBJID",
+                        "label": "Unique Subject Identifier",
+                        "type": "string",
+                        "length": 3
+                    },
+                    {
+                        "OID": "IT.DOMAIN",
+                        "name": "DOMAIN",
+                        "label": "Domain Identifier",
+                        "type": "string",
+                        "length": 2
+                    },
+                    {
+                        "OID": "IT.AGE",
+                        "name": "AGE",
+                        "label": "Subject Age",
+                        "type": "integer",
+                        "length": 2
+                    }
+                ],
+                "itemData": [
+                    [
+                        1,
+                        "MyStudy",
+                        "001",
+                        "AE",
+                        56
+                    ],
+                    [
+                        2,
+                        "MyStudy",
+                        "002",
+                        "AE",
+                        26
+                    ]
+                ]
+            }
+        }
+    }
+}
