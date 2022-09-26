@@ -9,6 +9,8 @@ ijson = "*"
 [dev-packages]
 autopep8 = "*"
 flake8 = "*"
+pytest = "*"
+psutil = "*"
 
 [requires]
 python_version = "3.7"

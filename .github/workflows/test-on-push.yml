@@ -1,0 +1,14 @@
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    uses: Parexel/stream-dataset-json/.github/workflows/test-package.yml@testing
