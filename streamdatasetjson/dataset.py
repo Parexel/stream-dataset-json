@@ -65,15 +65,16 @@ class Dataset:
     def getUniqueValues(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
         unique={}
 
-        for colname in self._items:
+        for colname in variable_names:
             unique[colname]=set([])
-
-        for record in self._records:
+        scanned_rows=0  
+        for record in self.observations:
             if rows_to_scan != 0 and scanned_rows>=rows_to_scan:
                 break
             scanned_rows=scanned_rows+1
-            for variable,value in zip(self._items,record):
-                unique[variable].add(value)
+            for variable,value in zip(self.variables,record):
+                if variable in variable_names:
+                    unique[variable].add(value)
 
         for columns in self._items:
             unique[colname]=list(unique[colname])
