@@ -76,7 +76,7 @@ class Dataset:
                 if variable in variable_names:
                     unique[variable].add(value)
 
-        for columns in self._items:
+        for colname in variable_names:
             unique[colname]=list(unique[colname])
 
         return unique
