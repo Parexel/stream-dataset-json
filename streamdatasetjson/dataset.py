@@ -1,6 +1,8 @@
+from enum import unique
 from io import TextIOWrapper
 from typing import Iterable, NamedTuple, NewType, Optional
 import streamdatasetjson.utils as utils
+import ijson
 
 
 Row = NewType("Row", 'list[str]')
@@ -23,14 +25,35 @@ class Dataset:
     def __init__(self, dataset_json_file: JSONFileObject, name: str, prefix: str):
         self._df = dataset_json_file
         self._prefix = prefix
-        self._name = name
-        self._records = self._get_attribute("records")
-        self._label = self._get_attribute("label")
-        self._items = [self._raw_to_item(raw_item)
-                       for raw_item in self._get_attribute("items")]
 
-    def _get_attribute(self, attr_name: str):
-        return utils.load_prefix(self._df, f"{self._prefix}.{attr_name}")
+        self._name = name
+        self._records = None
+        self._label = None
+        self._items = []
+        self._uniques={}
+
+        self._df.seek(0)
+        item, item_key = None, None
+        for prefix, event, value in ijson.parse(self._df):
+            if not prefix.startswith(self._prefix):
+                continue
+
+            sub_prefix = prefix.replace(self._prefix, "")
+
+            if sub_prefix == ".records":
+                self._records = value
+            elif sub_prefix == ".label":
+                self._label = value
+            elif sub_prefix == ".items.item":
+                if event == "start_map":
+                    item = {}
+                elif event == "end_map":
+                    self._items.append(self._raw_to_item(item))
+                elif event == "map_key":
+                    item_key = value
+            elif item_key and sub_prefix == f".items.item.{item_key}":
+                item[item_key] = value
+                item_key = None
 
     def _raw_to_item(self, raw_item: dict) -> Item:
         return Item(oid=raw_item["OID"],
@@ -38,6 +61,24 @@ class Dataset:
                     label=raw_item["label"],
                     type=raw_item["type"],
                     length=raw_item.get("length", None))
+
+    def getUniqueValues(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
+        unique={}
+
+        for colname in self._items:
+            unique[colname]=set([])
+
+        for record in self._records:
+            if rows_to_scan != 0 and scanned_rows>=rows_to_scan:
+                break
+            scanned_rows=scanned_rows+1
+            for variable,value in zip(self._items,record):
+                unique[variable].add(value)
+
+        for columns in self._items:
+            unique[colname]=list(unique[colname])
+
+        return unique
 
     @property
     def name(self) -> str:
