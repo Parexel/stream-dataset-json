@@ -30,7 +30,6 @@ class Dataset:
         self._records = None
         self._label = None
         self._items = []
-        self._uniques={}
 
         self._df.seek(0)
         item, item_key = None, None
@@ -62,9 +61,8 @@ class Dataset:
                     type=raw_item["type"],
                     length=raw_item.get("length", None))
 
-    def getUniqueValues(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
+    def get_unique_values(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
         unique={}
-
         for colname in variable_names:
             unique[colname]=set([])
         scanned_rows=0  
@@ -75,10 +73,8 @@ class Dataset:
             for variable,value in zip(self.variables,record):
                 if variable in variable_names:
                     unique[variable].add(value)
-
         for colname in variable_names:
             unique[colname]=list(unique[colname])
-
         return unique
 
     @property
