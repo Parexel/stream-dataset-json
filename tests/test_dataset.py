@@ -156,6 +156,20 @@ class TestDatasetGetUniques:
                 "AGE", None
             ) == set([56])
 
+    def test_finds_unique_values_only_for_the_specified_variables(
+        self,
+    ):
+        with dj.DatasetJSON(SIMPLE_DATASET_PATH) as json:
+            simple_dataset = json.get_dataset("DM")
+            uniques = simple_dataset.get_unique_values(variables=["DOMAIN", "AGE"])
+            assert len(uniques.keys()) == 2
+
+    def test_does_not_fail_if_given_an_invalid_varible_name_returns_an_empty_set(self):
+        with dj.DatasetJSON(SIMPLE_DATASET_PATH) as json:
+            simple_dataset = json.get_dataset("DM")
+            uniques = simple_dataset.get_unique_values(variables=["INVALID", "AGE"])
+            assert len(uniques.keys()) == 2 and len(uniques["INVALID"]) == 0
+
 
 class TestDatasetObservationsProperty:
     CONSIDERABLE_MEMORY_ENCREASE = 0.1
