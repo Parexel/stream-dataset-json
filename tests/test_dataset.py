@@ -172,7 +172,7 @@ class TestDatasetGetUniques:
 
 
 class TestDatasetObservationsProperty:
-    CONSIDERABLE_MEMORY_ENCREASE = 0.1
+    CONSIDERABLE_MEMORY_ENCREASE = 0.15
 
     def test_looping_over_every_observation_does_not_considerably_encrease_memory_usage(
         self,
