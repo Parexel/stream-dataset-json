@@ -5,15 +5,15 @@ import streamdatasetjson.utils as utils
 import ijson
 
 
-Row = NewType("Row", 'list[str]')
+Row = NewType("Row", "list[str]")
 JSONFileObject = NewType("JSONFileObject", TextIOWrapper)
 
 
 class Item(NamedTuple):
-    oid:    str
-    name:   str
-    label:  str
-    type:   str
+    oid: str
+    name: str
+    label: str
+    type: str
     length: Optional[int]
 
 
@@ -30,7 +30,6 @@ class Dataset:
         self._records = None
         self._label = None
         self._items = []
-        self._uniques={}
 
         self._df.seek(0)
         item, item_key = None, None
@@ -56,29 +55,35 @@ class Dataset:
                 item_key = None
 
     def _raw_to_item(self, raw_item: dict) -> Item:
-        return Item(oid=raw_item["OID"],
-                    name=raw_item["name"],
-                    label=raw_item["label"],
-                    type=raw_item["type"],
-                    length=raw_item.get("length", None))
+        return Item(
+            oid=raw_item["OID"],
+            name=raw_item["name"],
+            label=raw_item["label"],
+            type=raw_item["type"],
+            length=raw_item.get("length", None),
+        )
 
-    def getUniqueValues(self, variable_names: list[str], rows_to_scan: int = 0) -> dict[str, list[str]]:
-        unique={}
+    def get_unique_values(
+        self, variables: "list[str]", rows_to_scan: int = 0
+    ) -> "dict[str, set]":
+        uniques = {name: set() for name in variables}
 
-        for colname in self._items:
-            unique[colname]=set([])
-
-        for record in self._records:
-            if rows_to_scan != 0 and scanned_rows>=rows_to_scan:
+        scanned_rows = 0
+        for row in self.observations:
+            if rows_to_scan != 0 and scanned_rows >= rows_to_scan:
                 break
-            scanned_rows=scanned_rows+1
-            for variable,value in zip(self._items,record):
-                unique[variable].add(value)
 
-        for columns in self._items:
-            unique[colname]=list(unique[colname])
+            target_item_values = [
+                (item.name, value)
+                for item, value in zip(self.items, row)
+                if item.name in variables
+            ]
+            for variable, value in target_item_values:
+                uniques[variable].add(value)
 
-        return unique
+            scanned_rows = scanned_rows + 1
+
+        return uniques
 
     @property
     def name(self) -> str:
@@ -97,9 +102,9 @@ class Dataset:
         return self._label
 
     @property
-    def items(self) -> 'list[Item]':
+    def items(self) -> "list[Item]":
         return self._items
 
     @property
-    def variables(self) -> 'list[str]':
+    def variables(self) -> "list[str]":
         return [meta.name for meta in self.items]

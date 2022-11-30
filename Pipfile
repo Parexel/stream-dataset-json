@@ -5,12 +5,14 @@ name = "pypi"
 
 [packages]
 ijson = "*"
+pytest = "*"
 
 [dev-packages]
 autopep8 = "*"
 flake8 = "*"
 pytest = "*"
 psutil = "*"
+black = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.10.7"
